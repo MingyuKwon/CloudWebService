@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/MapButton"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="150dp"
+        android:text="상권 분석\n - 지도  -"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/StaticButton"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="100dp"
+        android:text="가맹점 분석\n - 통계  -"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/MapButton"
+        app:layout_constraintTop_toBottomOf="@+id/MapButton" />
+
+    <Button
+        android:id="@+id/DataRoomButton"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="100dp"
+        android:text="자료실"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/StaticButton"
+        app:layout_constraintTop_toBottomOf="@+id/StaticButton" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
