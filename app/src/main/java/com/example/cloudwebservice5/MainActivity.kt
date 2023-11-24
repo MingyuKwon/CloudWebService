@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.example.cloudwebservice5.Tools.RetrofitClient
 import com.example.cloudwebservice5.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             MapButton.setOnClickListener {
                 moveToOtherActivity("MapActivity")
+            }
+
+            DataRoomButton.setOnClickListener {
             }
         }
 

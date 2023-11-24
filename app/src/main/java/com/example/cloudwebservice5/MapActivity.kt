@@ -2,10 +2,23 @@ package com.example.cloudwebservice5
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.cloudwebservice5.Tools.RetrofitClient
+import com.example.cloudwebservice5.databinding.ActivityMainBinding
+import com.example.cloudwebservice5.databinding.ActivityMapBinding
 
 class MapActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMapBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        binding = ActivityMapBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.apply {
+            showGraphButton.setOnClickListener {
+                RetrofitClient.getRecommendData("강원", "서비스", "교육 (외국어)")
+            }
+
+        }
     }
 }

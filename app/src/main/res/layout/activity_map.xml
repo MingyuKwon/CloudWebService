@@ -8,9 +8,38 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:name="com.naver.maps.map.MapFragment"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
+        android:layout_width="350dp"
+        android:layout_height="580dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/mapShowingRegionText"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
+        android:autoSizeMaxTextSize="20sp"
+        android:autoSizeMinTextSize="5sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/showGraphButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginStart="40dp"
+        app:layout_constraintStart_toEndOf="@+id/mapShowingRegionText"
+        app:layout_constraintTop_toTopOf="@+id/mapShowingRegionText"
+        app:srcCompat="@drawable/baseline_bar_chart_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
