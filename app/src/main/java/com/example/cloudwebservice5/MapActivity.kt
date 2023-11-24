@@ -16,7 +16,7 @@ class MapActivity : AppCompatActivity() {
 
         binding.apply {
             showGraphButton.setOnClickListener {
-                RetrofitClient.getRecommendData("강원", "서비스", "교육 (외국어)")
+                RetrofitClient.getRecommendData("경남", "외식", "커피")
             }
 
         }

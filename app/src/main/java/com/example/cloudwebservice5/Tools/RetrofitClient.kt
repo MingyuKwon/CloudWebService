@@ -1,7 +1,7 @@
 package com.example.cloudwebservice5.Tools
 
 import android.util.Log
-import com.example.cloudwebservice5.RecommendationData
+import com.example.cloudwebservice5.Data.RecommendationData
 import com.google.android.play.integrity.internal.t
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -59,29 +59,33 @@ class RetrofitClient {
             return retrofit
         }
 
-        fun getRecommendData(region: String?, largeBusiness: String?, mdBusiness: String?, year: String? = "2022") {
+        fun getRecommendData(region: String?, largeBusiness: String?, mdBusiness: String?, year: String? = "2022"): RecommendationData? {
+
+            var responseBody : RecommendationData? = null
             val service = RetrofitClient.getClient()!!.create(getRecommendation::class.java)
 
-            service.getData(region, largeBusiness, mdBusiness, year)!!.enqueue(object : Callback<List<RecommendationData?>?>{
+            service.getData(region, largeBusiness, mdBusiness, year)!!.enqueue(object : Callback<RecommendationData?>{
                 override fun onResponse(
-                    call: Call<List<RecommendationData?>?>,
-                    response: Response<List<RecommendationData?>?>
+                    call: Call<RecommendationData?>,
+                    response: Response<RecommendationData?>
                 ) {
-                    var responseBody = response.body() as ArrayList<RecommendationData>
-                    for (a in responseBody)
-                    {
-                        Log.e("getRecommendData Success", a.toString())
-                    }
+                    responseBody = response.body() as RecommendationData
+                    Log.e("getRecommendData Error", responseBody!!.SaleData!!.count().toString())
+                    Log.e("getRecommendData Error", responseBody!!.GrowthData!!.count().toString())
+                    Log.e("getRecommendData Error", responseBody!!.CountData!!.count().toString())
+
                 }
 
-                override fun onFailure(call: Call<List<RecommendationData?>?>, t: Throwable) {
+                override fun onFailure(call: Call<RecommendationData?>, t: Throwable) {
                     Log.e("getRecommendData Error", t.message.toString())
                 }
 
             }
         )
 
-    }
+            return responseBody
+
+        }
 }
 
 }
@@ -91,5 +95,5 @@ interface getRecommendation {
     fun getData(@Query("region") region: String?,
                 @Query("largeBusiness") largeBusiness: String?,
                 @Query("mdBusiness") mdBusiness: String?,
-                @Query("year") year: String? ): Call<List<RecommendationData?>>
+                @Query("year") year: String? ): Call<RecommendationData>
 }

@@ -1,20 +1,19 @@
-package com.example.cloudwebservice5
+package com.example.cloudwebservice5.Data
 
 import android.util.Log
-import com.kakao.sdk.common.KakaoSdk.type
 import java.util.Date
 
-
-class RecommendationData {
+class RecommendationGrowthData {
     var id : Number? = null
-    var brandNm : String? = null
+    var yr : String? = null
     var indutyLclasNm : String? = null
     var indutyMlsfcNm : String? = null
-    var yr : String? = null
-    var areaNm : String? = null
-    var frcsCnt : Number? = null
-    var avrgSlsAmt : Number? = null
-    var arUnitAvrgSlsAmt : Number? = null
+    var assetsAmt : Number? = null
+    var slsAmt : Number? = null
+    var bsnProfitAmt : Number? = null
+    var assetsIncRt : Number? = null
+    var slsIncRt : Number? = null
+    var bsnProfitIncRt : Number? = null
     var date : Date? = null
 
     override fun toString(): String {
@@ -23,7 +22,7 @@ class RecommendationData {
         str += id
         str += "\n"
 
-        str += brandNm
+        str += yr
         str += "\n"
 
         str += indutyLclasNm
@@ -32,26 +31,25 @@ class RecommendationData {
         str += indutyMlsfcNm
         str += "\n"
 
-        str += yr
+        str += assetsAmt
         str += "\n"
 
-        str += areaNm
+        str += slsAmt
         str += "\n"
 
-        str += frcsCnt
+        str += bsnProfitAmt
         str += "\n"
 
-        str += avrgSlsAmt
+        str += assetsIncRt
         str += "\n"
 
-        str += arUnitAvrgSlsAmt
+        str += slsIncRt
         str += "\n"
 
-        str += date
+        str += bsnProfitIncRt
         str += "\n"
 
-        Log.e("RecommendationData" , str)
+        Log.e("RecommendationGrowthData" , str)
         return super.toString()
     }
-
 }
