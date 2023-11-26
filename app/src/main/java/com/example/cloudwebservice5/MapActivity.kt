@@ -2,9 +2,11 @@ package com.example.cloudwebservice5
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.example.cloudwebservice5.Tools.RetrofitClient
 import com.example.cloudwebservice5.databinding.ActivityMainBinding
 import com.example.cloudwebservice5.databinding.ActivityMapBinding
+import kotlinx.coroutines.launch
 
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
@@ -16,9 +18,11 @@ class MapActivity : AppCompatActivity() {
 
         binding.apply {
             showGraphButton.setOnClickListener {
-                RetrofitClient.getRecommendData("경남", "외식", "커피")
+                lifecycleScope.launch {
+//                    val recommendationData = RetrofitClient.getRecommendData("경남", "외식", "커피")
+                    val recommendationData = RetrofitClient.getRecommendChargeData("이디야커피", "2022")
+                }
             }
-
         }
     }
 }

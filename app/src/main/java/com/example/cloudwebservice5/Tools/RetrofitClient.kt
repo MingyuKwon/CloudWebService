@@ -1,6 +1,7 @@
 package com.example.cloudwebservice5.Tools
 
 import android.util.Log
+import com.example.cloudwebservice5.Data.RecommendationChargeData
 import com.example.cloudwebservice5.Data.RecommendationData
 import com.google.android.play.integrity.internal.t
 import okhttp3.OkHttpClient
@@ -59,31 +60,39 @@ class RetrofitClient {
             return retrofit
         }
 
-        fun getRecommendData(region: String?, largeBusiness: String?, mdBusiness: String?, year: String? = "2022"): RecommendationData? {
+        suspend fun getRecommendData(region: String?, largeBusiness: String?, mdBusiness: String?, year: String? = "2022"): RecommendationData? {
+            val service = getClient()!!.create(getRecommendation::class.java)
 
-            var responseBody : RecommendationData? = null
-            val service = RetrofitClient.getClient()!!.create(getRecommendation::class.java)
-
-            service.getData(region, largeBusiness, mdBusiness, year)!!.enqueue(object : Callback<RecommendationData?>{
-                override fun onResponse(
-                    call: Call<RecommendationData?>,
-                    response: Response<RecommendationData?>
-                ) {
-                    responseBody = response.body() as RecommendationData
-                    Log.e("getRecommendData Error", responseBody!!.SaleData!!.count().toString())
-                    Log.e("getRecommendData Error", responseBody!!.GrowthData!!.count().toString())
-                    Log.e("getRecommendData Error", responseBody!!.CountData!!.count().toString())
-
+            return try {
+                val response = service.getData(region, largeBusiness, mdBusiness, year)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("getRecommendData Error", response.message())
+                    null
                 }
-
-                override fun onFailure(call: Call<RecommendationData?>, t: Throwable) {
-                    Log.e("getRecommendData Error", t.message.toString())
-                }
-
+            } catch (e: Exception) {
+                Log.e("getRecommendData Error", e.message ?: "Unknown error")
+                null
             }
-        )
+        }
 
-            return responseBody
+
+        suspend fun getRecommendChargeData(brandName: String?, year: String? = "2022"): RecommendationChargeData? {
+            val service = getClient()!!.create(getRecommendationCharge::class.java)
+
+            return try {
+                val response = service.getData(brandName, year)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("getRecommendChargeData Error", response.message())
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("getRecommendChargeData Error", e.message ?: "Unknown error")
+                null
+            }
 
         }
 }
@@ -92,8 +101,14 @@ class RetrofitClient {
 
 interface getRecommendation {
     @GET("franchise/recommendation")
-    fun getData(@Query("region") region: String?,
+    suspend fun getData(@Query("region") region: String?,
                 @Query("largeBusiness") largeBusiness: String?,
                 @Query("mdBusiness") mdBusiness: String?,
-                @Query("year") year: String? ): Call<RecommendationData>
+                @Query("year") year: String? ): Response<RecommendationData>
+}
+
+interface getRecommendationCharge {
+    @GET("franchise/brand-charges")
+    suspend fun getData(@Query("brandName") brandName: String?,
+                @Query("year") year: String? ): Response<RecommendationChargeData>
 }
