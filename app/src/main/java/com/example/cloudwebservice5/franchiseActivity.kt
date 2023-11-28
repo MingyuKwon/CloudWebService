@@ -162,7 +162,7 @@ class franchiseActivity : AppCompatActivity() {
                 if(index > 3) break
             }
 
-            val xAxisLabels = data.SaleData!!.map { it.brandNm!! }.take(5).map { removeEnglishPart(it) }
+            val xAxisLabels = data.CountData!!.map { it.brandNm!! }.take(5).map { removeEnglishPart(it) }
             storeCountChart.xAxis.apply {
                 valueFormatter = IndexAxisValueFormatter(xAxisLabels)
                 granularity = 1f
