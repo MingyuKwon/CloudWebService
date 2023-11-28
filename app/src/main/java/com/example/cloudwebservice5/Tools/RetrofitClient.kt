@@ -132,7 +132,7 @@ class RetrofitClient {
 
         }
 
-        suspend fun getStoreData( largeBusiness: String?, mdBusiness: String?, smallBusiness: String?, ctprvnNm: String?, signguNm: String?  = "", adongNm: String? = "" ): StoreData? {
+        suspend fun getStoreData( largeBusiness: String?, mdBusiness: String?, smallBusiness: String?, ctprvnNm: String?, signguNm: String?  = "", adongNm: String? = "" ): List<StoreData>? {
             val service = getClientAnaly()!!.create(getStore::class.java)
 
             return try {
@@ -174,5 +174,5 @@ interface getStore {
                         @Query("adongNm") adongNm: String?,
                         @Query("largeBusiness") largeBusiness: String?,
                         @Query("mdBusiness") mdBusiness: String?,
-                        @Query("smallBusiness") smallBusiness: String? ): Response<StoreData>
+                        @Query("smallBusiness") smallBusiness: String? ): Response<List<StoreData>>
 }

@@ -2,4 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- 파란색 색깔 (기본 채도) -->
+    <color name="blue">#FF0000FF</color>
+
+    <!-- 파란색 (채도가 조금 더 낮음) -->
+    <color name="blue_light">#FF7799FF</color>
+
+    <!-- 파란색 (채도가 조금 더 높음) -->
+    <color name="blue_dark">#FF000099</color>
+
+    <!-- 파란색 (매우 낮은 채도) -->
+    <color name="blue_very_light">#FF9999FF</color>
+
+    <!-- 살구색 (기본 채도) -->
+    <color name="apricot">#FFFFB16B</color>
+
+    <!-- 살구색 (채도가 조금 낮음) -->
+    <color name="apricot_light">#FFFFC897</color>
+
+    <!-- 살구색 (채도가 조금 높음) -->
+    <color name="apricot_dark">#FFFF9A3D</color>
+
+    <!-- 살구색 (매우 낮은 채도) -->
+    <color name="apricot_very_light">#fffbe0</color>
 </resources>

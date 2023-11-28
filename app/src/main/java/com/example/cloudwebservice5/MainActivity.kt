@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
                 moveToOtherActivity("MapActivity")
             }
 
+            StaticButton.setOnClickListener {
+                moveToOtherActivity("franchiseActivity")
+            }
+
             DataRoomButton.setOnClickListener {
                 lifecycleScope.launch{
                     RetrofitClient.getStoreData("음식", "한식", "","서울특별시" )
