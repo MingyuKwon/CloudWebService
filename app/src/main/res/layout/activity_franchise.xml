@@ -10,49 +10,45 @@
         android:id="@+id/areaSpinner"
         android:layout_width="70dp"
         android:layout_height="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="30dp"
-        android:textAlignment="center"
+        android:layout_marginTop="20dp"
         android:background="@drawable/areabackground"
-         />
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/BigSpinner"
         android:layout_width="70dp"
         android:layout_height="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="110dp"
-        android:textAlignment="center"
+        android:layout_marginTop="20dp"
         android:background="@drawable/categorybackground"
-        />
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/MidSpinner"
         android:layout_width="70dp"
         android:layout_height="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="190dp"
-        android:textAlignment="center"
+        android:layout_marginTop="20dp"
         android:background="@drawable/categorybackground"
-        />
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/yearSpinner"
         android:layout_width="70dp"
         android:layout_height="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
-        android:textAlignment="center"
         android:background="@drawable/buttonbavkground"
-        />
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -143,6 +139,17 @@
             android:layout_marginVertical="10dp"
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/applyButton"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="Apply"
+        android:textSize="12sp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     />

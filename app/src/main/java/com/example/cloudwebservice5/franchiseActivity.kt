@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -32,15 +34,21 @@ class franchiseActivity : AppCompatActivity() {
     var mdBusiness: String? = "커피"
     var year: String? = "2022"
 
-    val BigCategoryArray = arrayOf("외식", "서비스", "도소매")
+    val BigCategoryArray = listOf<String>("외식", "서비스", "도소매")
 
-    val MidCategoryOutEatArray = arrayOf("커피", "분식", "서양식", "일식", "주점", "중식", "한식", "피자", "치킨")
-    val MidCategoryServiceArray = arrayOf("오락", "기타 서비스", "숙박", "스포츠 관련", "안경", "이미용", "자동차 관련")
-    val MidCategorySaleArray = arrayOf("(건강)식품", "기타도소매", "농수산물", "의류 / 패션", "종합소매점", "편의점", "화장품")
+    val MidCategoryOutEatArray = listOf<String>("커피", "분식", "서양식", "일식", "주점", "중식", "한식", "피자", "치킨")
+    val MidCategoryServiceArray = listOf<String>("오락", "기타 서비스", "숙박", "스포츠 관련", "안경", "이미용", "자동차 관련")
+    val MidCategorySaleArray = listOf<String>("(건강)식품", "기타도소매", "농수산물", "의류 / 패션", "종합소매점", "편의점", "화장품")
 
-    val AreaArray = arrayOf("강원", "경기", "경남", "경북", "광주", "대구", "대전", "부산", "서울", "울산", "인천", "전남", "전북", "충남", "충북" ,"제주","전체", "세종")
+    val AreaArray = listOf<String>("강원", "경기", "경남", "경북", "광주", "대구", "대전", "부산", "서울", "울산", "인천", "전남", "전북", "충남", "충북" ,"제주","전체", "세종")
+    val yearitems = listOf<String>("2022", "2021", "2020", "2019", "2018")
+    val emptyArray = listOf<String>("")
 
 
+    lateinit var yearAdapter: ArrayAdapter<String>
+    lateinit var areaAdapter: ArrayAdapter<String>
+    lateinit var BigCategoryAdapter: ArrayAdapter<String>
+    lateinit var MidCategoryAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,21 +57,71 @@ class franchiseActivity : AppCompatActivity() {
         binding = ActivityFranchiseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.apply {
-            val items = arrayOf("2022", "2021", "2020", "2019", "2018")
+        yearAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, ArrayList(yearitems))
+        areaAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, ArrayList(AreaArray))
+        BigCategoryAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, ArrayList(BigCategoryArray))
+        MidCategoryAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, ArrayList(emptyArray))
 
-            val adapter: ArrayAdapter<String> =
-                ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, items)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            yearSpinner.setAdapter(adapter)
+        binding.apply {
+
+            yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            yearSpinner.setAdapter(yearAdapter)
+
+            areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            areaSpinner.setAdapter(areaAdapter)
+
+            BigCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            BigSpinner.setAdapter(BigCategoryAdapter)
+            BigSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    // 항목이 선택되었을 때의 동작
+                    val selectedItem = parent.getItemAtPosition(position).toString()
+                    when(selectedItem)
+                    {
+                        "외식" -> {
+                            MidCategoryAdapter.clear() // 기존 데이터를 지웁니다
+                            MidCategoryAdapter.addAll(MidCategoryOutEatArray) // 새 데이터 추가
+                            MidCategoryAdapter.notifyDataSetChanged()
+                        }
+
+                        "서비스" -> {
+                            MidCategoryAdapter.clear() // 기존 데이터를 지웁니다
+                            MidCategoryAdapter.addAll(MidCategoryServiceArray ) // 새 데이터 추가
+                            MidCategoryAdapter.notifyDataSetChanged()
+                        }
+
+                        "도소매" -> {
+                            MidCategoryAdapter.clear() // 기존 데이터를 지웁니다
+                            MidCategoryAdapter.addAll(MidCategorySaleArray ) // 새 데이터 추가
+                            MidCategoryAdapter.notifyDataSetChanged()
+                        }
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+            }
+
+            MidCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            MidSpinner.setAdapter(MidCategoryAdapter)
+
+            applyButton.setOnClickListener {
+                updateData()
+            }
+
         }
 
-        updateData()
 
     }
 
     fun updateData()
     {
+        region = binding.areaSpinner.selectedItem.toString()
+        largeBusiness = binding.BigSpinner.selectedItem.toString()
+        mdBusiness = binding.MidSpinner.selectedItem.toString()
+        year = binding.yearSpinner.selectedItem.toString()
+
         lifecycleScope.launch {
             val recommendationData = getRecommendData(region, largeBusiness, mdBusiness, year)
             if (recommendationData != null) {
@@ -76,6 +134,11 @@ class franchiseActivity : AppCompatActivity() {
 
     }
 
+    fun removeEnglishPart(input: String): String {
+        val regex = "\\s*\\(.*?\\)".toRegex() // 괄호와 괄호 안의 내용에 대한 정규 표현식
+        return input.replace(regex, "") // 정규 표현식에 해당하는 부분을 빈 문자열로 대체
+    }
+
     fun updateGraph(data : RecommendationData)
     {
         binding.apply {
@@ -86,7 +149,7 @@ class franchiseActivity : AppCompatActivity() {
                 if(index > 3) break
             }
 
-            val xAxisLabels = data.CountData!!.map { it.brandNm!! }.take(5) // 최대 5개까지의 레이블
+            val xAxisLabels = data.SaleData!!.map { it.brandNm!! }.take(5).map { removeEnglishPart(it) }
             storeCountChart.xAxis.apply {
                 valueFormatter = IndexAxisValueFormatter(xAxisLabels)
                 granularity = 1f
@@ -122,7 +185,8 @@ class franchiseActivity : AppCompatActivity() {
                 if(index > 3) break
             }
 
-            val xAxisLabels = data.SaleData!!.map { it.brandNm!! }.take(5) // 최대 5개까지의 레이블
+            val xAxisLabels = data.SaleData!!.map { it.brandNm!! }.take(5).map { removeEnglishPart(it) }
+
             storeSaleChart.xAxis.apply {
                 valueFormatter = IndexAxisValueFormatter(xAxisLabels)
                 granularity = 1f
@@ -132,7 +196,7 @@ class franchiseActivity : AppCompatActivity() {
             storeSaleChart.axisLeft.apply {
                 granularity = 3000f // Y축의 최소 간격 설정
                 labelCount = 5 // Y축에 표시될 레이블의 수
-                axisMinimum = 15000f // Y축의 최소값
+                axisMinimum = 0f // Y축의 최소값
                 // 필요에 따라 axisMaximum 설정도 가능
             }
 
