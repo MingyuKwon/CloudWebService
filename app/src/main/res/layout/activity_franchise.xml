@@ -7,6 +7,42 @@
     tools:context=".franchiseActivity">
 
     <Spinner
+        android:id="@+id/areaSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        android:textAlignment="center"
+        android:background="@drawable/areabackground"
+         />
+
+    <Spinner
+        android:id="@+id/BigSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="110dp"
+        android:textAlignment="center"
+        android:background="@drawable/categorybackground"
+        />
+
+    <Spinner
+        android:id="@+id/MidSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="190dp"
+        android:textAlignment="center"
+        android:background="@drawable/categorybackground"
+        />
+
+    <Spinner
         android:id="@+id/yearSpinner"
         android:layout_width="70dp"
         android:layout_height="30dp"
@@ -16,19 +52,30 @@
         android:layout_marginEnd="30dp"
         android:textAlignment="center"
         android:background="@drawable/buttonbavkground"
-         />
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="80dp"
+        android:text="매장 수"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="110dp"
         android:background="@drawable/graphbackground"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="30dp">
 
-        <com.github.mikephil.charting.charts.PieChart
+        <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/storeCountChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,18 +84,28 @@
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="300dp"
+        android:text="단위 면적당 이익률"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/graphbackground"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
         tools:layout_editor_absoluteX="30dp">
 
-        <com.github.mikephil.charting.charts.PieChart
+        <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/storeSaleChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,17 +114,28 @@
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="520dp"
+        android:text="업종 성장률"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/cardView3"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/graphbackground"
         app:layout_constraintTop_toBottomOf="@+id/cardView2"
         tools:layout_editor_absoluteX="30dp">
 
-        <com.github.mikephil.charting.charts.PieChart
+        <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/storeGrowthChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
