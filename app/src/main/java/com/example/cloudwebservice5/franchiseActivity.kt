@@ -1,5 +1,6 @@
 package com.example.cloudwebservice5
 
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -9,7 +10,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.cloudwebservice5.Data.RecommendationChargeData
 import com.example.cloudwebservice5.Data.RecommendationData
+import com.example.cloudwebservice5.Dialog.ChargePopup
+import com.example.cloudwebservice5.Tools.RetrofitClient.Companion.getRecommendChargeData
 import com.example.cloudwebservice5.Tools.RetrofitClient.Companion.getRecommendData
 import com.example.cloudwebservice5.databinding.ActivityFranchiseBinding
 import com.github.mikephil.charting.components.Legend
@@ -17,10 +21,13 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.coroutines.launch
 
 
@@ -139,13 +146,19 @@ class franchiseActivity : AppCompatActivity() {
         return input.replace(regex, "") // 정규 표현식에 해당하는 부분을 빈 문자열로 대체
     }
 
-    fun updateGraph(data : RecommendationData)
+    fun ShowBrandPopUp(data : RecommendationChargeData)
     {
+        val dialogFragment = ChargePopup(data)
+        dialogFragment.show(supportFragmentManager, "ShowBrandPopUp")
+    }
+
+
+    fun updateGraph(data : RecommendationData)    {
         binding.apply {
             val barEntries = ArrayList<BarEntry>()
             for ((index, count) in data.CountData!!.withIndex()) {
                 // X축 위치를 인덱스로, Y축 값을 count로 설정
-                barEntries.add(BarEntry(index.toFloat(), count.count!!.toFloat()))
+                barEntries.add(BarEntry(index.toFloat(), count.count!!.toFloat(), count.brandNm))
                 if(index > 3) break
             }
 
@@ -175,13 +188,36 @@ class franchiseActivity : AppCompatActivity() {
             val barData = BarData(barDataSet)
             storeCountChart.setData(barData)
             storeCountChart.invalidate()
+
+
+            storeCountChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                override fun onValueSelected(e: Entry?, h: Highlight?) {
+                    // 여기에서 팝업 로직을 구현합니다
+                    e?.let {
+                        val name = it.data as? String // 데이터 객체를 String으로 변환
+                        lifecycleScope.launch {
+                            val chargeData = getRecommendChargeData(name, year)
+                            if (chargeData != null) {
+                                // recommendationData 처리
+                                ShowBrandPopUp(chargeData)
+                            } else {
+                                Log.e("chargeData Error", "")
+                            }
+                        }
+                    }
+                }
+
+                override fun onNothingSelected() {
+                    // 아무것도 선택되지 않았을 때의 로직 (필요한 경우)
+                }
+            })
         }
 
         binding.apply {
             val barEntries = ArrayList<BarEntry>()
             for ((index, sale) in data.SaleData!!.withIndex()) {
                 // X축 위치를 인덱스로, Y축 값을 count로 설정
-                barEntries.add(BarEntry(index.toFloat(), sale.arUnitAvrgSlsAmt!!.toFloat()))
+                barEntries.add(BarEntry(index.toFloat(), sale.arUnitAvrgSlsAmt!!.toFloat(), sale.brandNm))
                 if(index > 3) break
             }
 
