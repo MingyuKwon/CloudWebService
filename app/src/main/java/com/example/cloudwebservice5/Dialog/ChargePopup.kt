@@ -20,15 +20,32 @@ import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.example.cloudwebservice5.Data.RecommendationChargeData
 import com.example.cloudwebservice5.R
+import com.example.cloudwebservice5.databinding.ActivityMainBinding
+import com.example.cloudwebservice5.databinding.FragmentChargePopupBinding
 import java.time.LocalDateTime
 
-class ChargePopup(data : RecommendationChargeData) : DialogFragment() {
+class ChargePopup(var data : RecommendationChargeData) : DialogFragment() {
+    private lateinit var binding: FragmentChargePopupBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?) : Dialog {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.fragment_charge_popup, null)
+        binding = FragmentChargePopupBinding.inflate(layoutInflater)
+
+        binding.apply {
+            franchiseTitle.text = data.brandNm
+            franchiseBig.text = data.indutyLclasNm
+            franchiseMid.text = data.indutyMlsfcNm
+
+            jngBzmnJngAmt.text = jngBzmnJngAmt.text.toString() + data.jngBzmnJngAmt + " (천원)"
+            jngBzmnEduAmt.text = jngBzmnEduAmt.text.toString() + data.jngBzmnEduAmt+ " (천원)"
+            jngBzmnAssrncAmt.text = jngBzmnAssrncAmt.text.toString() + data.jngBzmnAssrncAmt+ " (천원)"
+            jngBzmnEtcAmt.text = jngBzmnEtcAmt.text.toString() + data.jngBzmnEtcAmt+ " (천원)"
+            smtnAmt.text = smtnAmt.text.toString() + data.smtnAmt+ " (천원)"
+        }
+
+
 
         return AlertDialog.Builder(requireContext())
-            .setView(dialogView)
+            .setView(binding.root)
             .create()
     }
 

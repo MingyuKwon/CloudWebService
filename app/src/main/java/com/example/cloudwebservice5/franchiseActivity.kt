@@ -252,6 +252,28 @@ class franchiseActivity : AppCompatActivity() {
             val barData = BarData(barDataSet)
             storeSaleChart.setData(barData)
             storeSaleChart.invalidate()
+
+            storeSaleChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                override fun onValueSelected(e: Entry?, h: Highlight?) {
+                    // 여기에서 팝업 로직을 구현합니다
+                    e?.let {
+                        val name = it.data as? String // 데이터 객체를 String으로 변환
+                        lifecycleScope.launch {
+                            val chargeData = getRecommendChargeData(name, year)
+                            if (chargeData != null) {
+                                // recommendationData 처리
+                                ShowBrandPopUp(chargeData)
+                            } else {
+                                Log.e("chargeData Error", "")
+                            }
+                        }
+                    }
+                }
+
+                override fun onNothingSelected() {
+                    // 아무것도 선택되지 않았을 때의 로직 (필요한 경우)
+                }
+            })
         }
 
         binding.apply {

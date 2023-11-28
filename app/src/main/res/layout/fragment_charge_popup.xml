@@ -1,14 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Dialog.ChargePopup">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+
+        <TextView
+            android:id="@+id/franchiseTitle"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMinTextSize="5sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:text="Title"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/buttonbavkground"
+            />
+
+        <TextView
+            android:id="@+id/franchiseBig"
+            android:layout_width="70dp"
+            android:layout_height="36dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMinTextSize="5sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:text="Title"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="165dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/categorybackground"
+            />
+
+        <TextView
+            android:id="@+id/franchiseMid"
+            android:layout_width="70dp"
+            android:layout_height="36dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMinTextSize="5sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:text="Title"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="240dp"
+            android:layout_marginEnd="10dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/categorybackground"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/graphbackground"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="90dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/jngBzmnJngAmt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:gravity="center_vertical"
+                android:text="정비 부담금    = "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/jngBzmnEduAmt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:gravity="center_vertical"
+                android:text="교육 부담금    = "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/jngBzmnAssrncAmt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="5sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:gravity="center_vertical"
+                android:text="보험 부담금    = "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/jngBzmnEtcAmt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="5sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:gravity="center_vertical"
+                android:text="기타 부담금    = "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/smtnAmt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="19dp"
+                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="5sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:gravity="center_vertical"
+                android:text="  총 지출액      = "
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>
