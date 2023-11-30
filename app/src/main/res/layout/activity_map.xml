@@ -6,29 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
+    <Spinner
+        android:id="@+id/areaMidSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/areabackground"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/areaSmallSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/areabackground"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/categoryBigSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/categorybackground"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="@+id/areaMidSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/areaMidSpinner" />
+
+    <Spinner
+        android:id="@+id/categoryMidSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/categorybackground"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/categoryBigSpinner"
+        app:layout_constraintTop_toTopOf="@+id/categoryBigSpinner" />
+
+    <Spinner
+        android:id="@+id/categorySmallSpinner"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/categorybackground"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/categoryMidSpinner"
+        app:layout_constraintTop_toTopOf="@+id/categoryMidSpinner" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
         android:name="com.naver.maps.map.MapFragment"
         android:layout_width="350dp"
         android:layout_height="580dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="70dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/mapShowingRegionText"
-        android:layout_width="240dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="15dp"
-        android:autoSizeMaxTextSize="20sp"
-        android:autoSizeMinTextSize="5sp"
-        android:autoSizeStepGranularity="1sp"
-        android:autoSizeTextType="uniform"
-        android:gravity="center_vertical"
-        android:text="TextView"
-        android:textStyle="bold"
+        android:layout_marginTop="120dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,10 +72,32 @@
         android:id="@+id/showGraphButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginStart="40dp"
-        app:layout_constraintStart_toEndOf="@+id/mapShowingRegionText"
-        app:layout_constraintTop_toTopOf="@+id/mapShowingRegionText"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
         app:srcCompat="@drawable/baseline_bar_chart_24" />
+
+    <LinearLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/semiTransparentBlack"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/applyButton"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="Apply"
+        android:textSize="12sp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

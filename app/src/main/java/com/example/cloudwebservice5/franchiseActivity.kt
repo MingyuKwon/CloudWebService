@@ -130,6 +130,7 @@ class franchiseActivity : AppCompatActivity() {
         year = binding.yearSpinner.selectedItem.toString()
 
         lifecycleScope.launch {
+            binding.loadingContainer.visibility = View.VISIBLE
             val recommendationData = getRecommendData(region, largeBusiness, mdBusiness, year)
             if (recommendationData != null) {
                 // recommendationData 처리
@@ -137,6 +138,7 @@ class franchiseActivity : AppCompatActivity() {
             } else {
                 Log.e("recommendationData Error", "")
             }
+            binding.loadingContainer.visibility = View.GONE
         }
 
     }

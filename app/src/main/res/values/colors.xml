@@ -27,4 +27,6 @@
     <color name="green_very_light">#FFCCFFCC</color>
     <!-- 초록색 (매우 낮은 채도) -->
     <color name="green_pale">#FFE8FFE8</color>
+
+    <color name="semiTransparentBlack">#80000000</color>
 </resources>
