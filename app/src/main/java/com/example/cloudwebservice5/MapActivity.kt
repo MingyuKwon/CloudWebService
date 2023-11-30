@@ -60,8 +60,17 @@ class MapActivity : AppCompatActivity() {
     val areaSmallArray7 = listOf<String>( "", "행정동명", "항동", "개봉1동", "구로2동", "구로3동", "개봉3동", "가리봉동", "구로5동", "오류2동", "고척2동", "고척1동", "오류1동", "구로4동", "신도림동", "개봉2동", "수궁동", "구로1동")
     val areaSmallArray8 = listOf<String>( "", "시흥5동", "독산3동", "시흥1동", "가산동", "독산2동", "독산1동", "독산4동", "시흥3동", "시흥4동", "시흥2동")
     val areaSmallArray9 = listOf<String>( "", "중계본동", "상계8동", "상계5동", "공릉1동", "공릉2동", "상계2동", "상계10동", "중계2.3동", "중계4동", "상계6.7동", "하계1동", "상계3.4동", "상계9동", "중계1동", "월계3동", "상계1동", "월계2동", "월계1동", "하계2동")
-    val areaSmallArray10 = listOf<String>( "", "시흥5동", "독산3동", "시흥1동", "가산동", "독산2동", "독산1동", "독산4동", "시흥3동", "시흥4동", "시흥2동")
-    val areaSmallArray11 = listOf<String>( "", "시흥5동", "독산3동", "시흥1동", "가산동", "독산2동", "독산1동", "독산4동", "시흥3동", "시흥4동", "시흥2동")
+    val areaSmallArray10 = listOf<String>( "", "창2동", "창1동", "도봉1동", "도봉2동", "방학2동", "창5동", "방학1동", "창3동", "쌍문2동", "창4동", "쌍문3동", "쌍문1동", "방학3동", "쌍문4동")
+    val areaSmallArray11 = listOf<String>( "", "제기동", "장안1동", "전농1동", "회기동", "이문1동", "용신동", "이문2동", "답십리2동", "장안2동", "청량리동", "답십리1동", "휘경1동", "휘경2동", "전농2동")
+    val areaSmallArray12 = listOf<String>( "", "신대방1동", "사당3동", "흑석동", "노량진1동", "대방동", "노량진2동", "사당1동", "상도1동", "상도2동", "상도3동", "상도4동", "사당4동", "신대방2동", "사당5동", "사당2동")
+    val areaSmallArray13 = listOf<String>( "", "성산1동", "망원1동", "서교동", "서강동", "대흥동", "도화동", "연남동", "상암동", "아현동", "망원2동", "성산2동", "용강동", "신수동", "합정동", "공덕동", "염리동")
+    val areaSmallArray14 = listOf<String>( "", "홍제1동", "남가좌1동", "홍제3동", "홍제2동", "북가좌1동", "충현동", "신촌동", "천연동", "북가좌2동", "연희동", "홍은2동", "남가좌2동", "홍은1동", "북아현동")
+
+
+
+
+
+
 
 
 
@@ -174,31 +183,31 @@ class MapActivity : AppCompatActivity() {
 
                         "도봉구" -> {
                             areaSmallAdapter.clear() // 기존 데이터를 지웁니다
-                            areaSmallAdapter.addAll(emptyArray) // 새 데이터 추가
+                            areaSmallAdapter.addAll(areaSmallArray10) // 새 데이터 추가
                             areaSmallAdapter.notifyDataSetChanged()
                         }
 
                         "동대문구" -> {
                             areaSmallAdapter.clear() // 기존 데이터를 지웁니다
-                            areaSmallAdapter.addAll(emptyArray) // 새 데이터 추가
+                            areaSmallAdapter.addAll(areaSmallArray11) // 새 데이터 추가
                             areaSmallAdapter.notifyDataSetChanged()
                         }
 
                         "동작구" -> {
                             areaSmallAdapter.clear() // 기존 데이터를 지웁니다
-                            areaSmallAdapter.addAll(emptyArray) // 새 데이터 추가
+                            areaSmallAdapter.addAll(areaSmallArray12) // 새 데이터 추가
                             areaSmallAdapter.notifyDataSetChanged()
                         }
 
                         "마포구" -> {
                             areaSmallAdapter.clear() // 기존 데이터를 지웁니다
-                            areaSmallAdapter.addAll(emptyArray) // 새 데이터 추가
+                            areaSmallAdapter.addAll(areaSmallArray13) // 새 데이터 추가
                             areaSmallAdapter.notifyDataSetChanged()
                         }
 
                         "서대문구" -> {
                             areaSmallAdapter.clear() // 기존 데이터를 지웁니다
-                            areaSmallAdapter.addAll(emptyArray) // 새 데이터 추가
+                            areaSmallAdapter.addAll(areaSmallArray14) // 새 데이터 추가
                             areaSmallAdapter.notifyDataSetChanged()
                         }
 
