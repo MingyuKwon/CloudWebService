@@ -11,7 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import com.example.cloudwebservice5.Data.RecommendationChargeData
 import com.example.cloudwebservice5.Data.StoreData
+import com.example.cloudwebservice5.Dialog.ChargePopup
+import com.example.cloudwebservice5.Dialog.StatisticsPopup
 import com.example.cloudwebservice5.Tools.RetrofitClient
 import com.example.cloudwebservice5.databinding.ActivityMainBinding
 import com.example.cloudwebservice5.databinding.ActivityMapBinding
@@ -55,7 +58,7 @@ class MapActivity : AppCompatActivity() {
     val Category5tArray1 = listOf<String>("" ,"미용실","피부 관리실","네일숍",)
 
 
-    val areaMidArray = listOf<String>("" ,"강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구",
+    val areaMidArray = listOf<String>("강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구",
         "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구",
         "용산구", "은평구", "종로구", "중구", "중랑구")
 
@@ -118,12 +121,12 @@ class MapActivity : AppCompatActivity() {
 
     var context : Context = this
 
-    var indsLclsNm : String? = "음식"
-    var indsMclsNm : String? = "동남아시아"
-    var indsSclsNm : String? = "베트남식 전문"
+    var indsLclsNm : String? = ""
+    var indsMclsNm : String? = ""
+    var indsSclsNm : String? = ""
 
-    var signguNm: String? = "광진구"
-    var adongNm: String? = "자양3동"
+    var signguNm: String? = ""
+    var adongNm: String? = ""
 
     private val markers = mutableListOf<Marker>()
 
@@ -211,6 +214,36 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
+    fun showStatistic()
+    {
+        indsLclsNm = binding.categoryBigSpinner.selectedItem.toString()
+        indsMclsNm = binding.categoryMidSpinner.selectedItem.toString()
+        indsSclsNm = binding.categorySmallSpinner.selectedItem.toString()
+
+        signguNm= binding.areaMidSpinner.selectedItem.toString()
+        adongNm= binding.areaSmallSpinner.selectedItem.toString()
+        
+        lifecycleScope.launch{
+            binding.loadingContainer.visibility = View.VISIBLE
+            val big = ArrayList<StoreData>()
+            val mid = ArrayList<StoreData>()
+            val small = ArrayList<StoreData>()
+
+            var storeData1 : List<StoreData>? = null
+            var storeData2 : List<StoreData>? = null
+            var storeData3 : List<StoreData>? = null
+
+            storeData1 = RetrofitClient.getStoreData(indsLclsNm, "", "", "서울특별시", signguNm, adongNm )
+            if(indsMclsNm != "") storeData2 = RetrofitClient.getStoreData(indsLclsNm, indsMclsNm, "", "서울특별시", signguNm, adongNm )
+            if(indsSclsNm != "") storeData3 = RetrofitClient.getStoreData(indsLclsNm, indsMclsNm, indsSclsNm, "서울특별시", signguNm, adongNm )
+
+            val dialogFragment = StatisticsPopup(signguNm, adongNm, indsLclsNm, indsMclsNm, indsSclsNm, storeData1, storeData2, storeData3)
+            dialogFragment.show(supportFragmentManager, "ShowStaPopUp")
+
+            binding.loadingContainer.visibility = View.GONE
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -228,6 +261,10 @@ class MapActivity : AppCompatActivity() {
         binding.apply {
             applyButton.setOnClickListener {
                 updateData()
+            }
+
+            showStatisButton.setOnClickListener {
+                showStatistic()
             }
 
             areaMidAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
