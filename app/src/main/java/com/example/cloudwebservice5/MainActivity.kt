@@ -3,12 +3,11 @@ package com.example.cloudwebservice5
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.lifecycleScope
 import com.example.cloudwebservice5.Tools.RetrofitClient
+import com.example.cloudwebservice5.common.SharedPreferencesManager
 import com.example.cloudwebservice5.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -32,6 +31,14 @@ class MainActivity : AppCompatActivity() {
                     RetrofitClient.getStoreData("음식", "한식", "","서울특별시" )
                 }
             }
+
+            mentoringButton.setOnClickListener {
+                SharedPreferencesManager.clearPreferences(this@MainActivity)
+                val loginInfo = SharedPreferencesManager.getLoginInfo(this@MainActivity);
+                if(loginInfo["userId"].isNullOrEmpty()) {
+                    moveToOtherActivity("LoginActivity")
+                }
+            }
         }
 
     }
@@ -49,5 +56,10 @@ class MainActivity : AppCompatActivity() {
             // 기타 예외 처리
             e.printStackTrace()
         }
+    }
+
+    override fun onDestroy() {
+        SharedPreferencesManager.clearPreferences(this)
+        super.onDestroy()
     }
 }
