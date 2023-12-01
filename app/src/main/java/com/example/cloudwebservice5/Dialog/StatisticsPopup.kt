@@ -32,6 +32,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
 class StatisticsPopup(
@@ -61,17 +62,42 @@ class StatisticsPopup(
 
     fun showGraph()    {
         binding.apply {
-            val entries = ArrayList<PieEntry>()
-            entries.add(PieEntry(40f, "Category 1"))
-            entries.add(PieEntry(30f, "Category 2"))
-            entries.add(PieEntry(20f, "Category 3"))
-            entries.add(PieEntry(10f, "Category 4"))
+            val bigMap = mutableMapOf <String, Int>()
+            for(data in bigData!!)
+            {
+                val count = bigMap.get(data.indsLclsNm)
+                if(count == null)
+                {
+                    bigMap.put(data.indsLclsNm!!, 1)
+                }else
+                {
+                    bigMap.set(data.indsLclsNm!!, count!! + 1)
+                }
+            }
 
+            val entries = ArrayList<PieEntry>()
+            for(data in bigMap)
+            {
+                entries.add(PieEntry(data.value.toFloat(), data.key + " " +(data.value.toFloat() / bigData!!.size * 100).toInt() + "%"))
+                if(data.key == CategoryBig)
+                {
+                    categoryBig.text = categoryBig.text.toString() + " (" + (data.value.toFloat() / bigData!!.size * 100).toInt() + "%)"
+                }
+            }
             // 파이 데이터셋 생성
-            val dataSet = PieDataSet(entries, "Categories")
+            val dataSet = PieDataSet(entries, "대분류")
 
             // 데이터셋 스타일링
-            dataSet.setColors(*ColorTemplate.MATERIAL_COLORS) // 색상 설정
+            val colors = ArrayList<Int>()
+            colors.add(Color.RED) // 첫 번째 항목에 적용될 색상
+            colors.add(Color.BLUE)
+            colors.add(Color.GREEN)
+            colors.add(Color.GRAY)
+            colors.add(Color.YELLOW)
+
+            dataSet.colors = colors
+
+
             dataSet.sliceSpace = 3f // 각 조각 사이의 공간
             dataSet.valueTextColor = Color.BLACK // 값의 텍스트 색상
             dataSet.valueTextSize = 10f // 값의 텍스트 크기
@@ -101,7 +127,6 @@ class StatisticsPopup(
 
             PieChart1.setExtraOffsets(50f, 0f, 0f, 0f)
 
-
             val legend = PieChart1.legend
             legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
             legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
@@ -114,17 +139,40 @@ class StatisticsPopup(
         if(midData != null)
         {
             binding.apply {
-                val entries = ArrayList<PieEntry>()
-                entries.add(PieEntry(40f, "Category 1"))
-                entries.add(PieEntry(30f, "Category 2"))
-                entries.add(PieEntry(20f, "Category 3"))
-                entries.add(PieEntry(10f, "Category 4"))
+                val midMap = mutableMapOf <String, Int>()
+                for(data in midData!!)
+                {
+                    val count = midMap.get(data.indsMclsNm)
+                    if(count == null)
+                    {
+                        midMap.put(data.indsMclsNm!!, 1)
+                    }else
+                    {
+                        midMap.set(data.indsMclsNm!!, count!! + 1)
+                    }
+                }
 
+                val entries = ArrayList<PieEntry>()
+                for(data in midMap)
+                {
+                    entries.add(PieEntry(data.value.toFloat(), data.key + " " +(data.value.toFloat() / midData!!.size * 100).toInt() + "%"))
+                    if(data.key == CategoryMid)
+                    {
+                        categoryMid.text = categoryMid.text.toString() + " (" + (data.value.toFloat() / midData!!.size * 100).toInt() + "%)"
+                    }
+                }
                 // 파이 데이터셋 생성
-                val dataSet = PieDataSet(entries, "Categories")
+                val dataSet = PieDataSet(entries, "중분류")
 
                 // 데이터셋 스타일링
-                dataSet.setColors(*ColorTemplate.MATERIAL_COLORS) // 색상 설정
+                val colors = ArrayList<Int>()
+                colors.add(Color.RED) // 첫 번째 항목에 적용될 색상
+                colors.add(Color.BLUE)
+                colors.add(Color.GREEN)
+                colors.add(Color.GRAY)
+                colors.add(Color.YELLOW)
+
+                dataSet.colors = colors
                 dataSet.sliceSpace = 3f // 각 조각 사이의 공간
                 dataSet.valueTextColor = Color.BLACK // 값의 텍스트 색상
                 dataSet.valueTextSize = 10f // 값의 텍스트 크기
@@ -169,17 +217,41 @@ class StatisticsPopup(
         if(smallData != null)
         {
             binding.apply {
+                val smallMap = mutableMapOf <String, Int>()
+                for(data in smallData!!)
+                {
+                    val count = smallMap.get(data.indsSclsNm)
+                    if(count == null)
+                    {
+                        smallMap.put(data.indsSclsNm!!, 1)
+                    }else
+                    {
+                        smallMap.set(data.indsSclsNm!!, count!! + 1)
+                    }
+                }
+
                 val entries = ArrayList<PieEntry>()
-                entries.add(PieEntry(40f, "Category 1"))
-                entries.add(PieEntry(30f, "Category 2"))
-                entries.add(PieEntry(20f, "Category 3"))
-                entries.add(PieEntry(10f, "Category 4"))
+                for(data in smallMap)
+                {
+                    entries.add(PieEntry(data.value.toFloat(), data.key + " " + (data.value.toFloat() / smallData!!.size * 100).toInt() + "%"))
+                    if(data.key == CategorySmall)
+                    {
+                        categorySmall.text = categorySmall.text.toString() + " (" + (data.value.toFloat() / smallData!!.size * 100).toInt() + "%)"
+                    }
+                }
 
                 // 파이 데이터셋 생성
-                val dataSet = PieDataSet(entries, "Categories")
+                val dataSet = PieDataSet(entries, "소분류")
 
                 // 데이터셋 스타일링
-                dataSet.setColors(*ColorTemplate.MATERIAL_COLORS) // 색상 설정
+                val colors = ArrayList<Int>()
+                colors.add(Color.RED) // 첫 번째 항목에 적용될 색상
+                colors.add(Color.BLUE)
+                colors.add(Color.GREEN)
+                colors.add(Color.GRAY)
+                colors.add(Color.YELLOW)
+
+                dataSet.colors = colors
                 dataSet.sliceSpace = 3f // 각 조각 사이의 공간
                 dataSet.valueTextColor = Color.BLACK // 값의 텍스트 색상
                 dataSet.valueTextSize = 10f // 값의 텍스트 크기

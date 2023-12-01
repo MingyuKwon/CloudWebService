@@ -222,7 +222,7 @@ class MapActivity : AppCompatActivity() {
 
         signguNm= binding.areaMidSpinner.selectedItem.toString()
         adongNm= binding.areaSmallSpinner.selectedItem.toString()
-        
+
         lifecycleScope.launch{
             binding.loadingContainer.visibility = View.VISIBLE
             val big = ArrayList<StoreData>()
@@ -233,9 +233,9 @@ class MapActivity : AppCompatActivity() {
             var storeData2 : List<StoreData>? = null
             var storeData3 : List<StoreData>? = null
 
-            storeData1 = RetrofitClient.getStoreData(indsLclsNm, "", "", "서울특별시", signguNm, adongNm )
-            if(indsMclsNm != "") storeData2 = RetrofitClient.getStoreData(indsLclsNm, indsMclsNm, "", "서울특별시", signguNm, adongNm )
-            if(indsSclsNm != "") storeData3 = RetrofitClient.getStoreData(indsLclsNm, indsMclsNm, indsSclsNm, "서울특별시", signguNm, adongNm )
+            storeData1 = RetrofitClient.getStoreData("", "", "", "서울특별시", signguNm, adongNm )
+            if(indsMclsNm != "") storeData2 = RetrofitClient.getStoreData(indsLclsNm, "", "", "서울특별시", signguNm, adongNm )
+            if(indsSclsNm != "") storeData3 = RetrofitClient.getStoreData(indsLclsNm, indsMclsNm, "", "서울특별시", signguNm, adongNm )
 
             val dialogFragment = StatisticsPopup(signguNm, adongNm, indsLclsNm, indsMclsNm, indsSclsNm, storeData1, storeData2, storeData3)
             dialogFragment.show(supportFragmentManager, "ShowStaPopUp")
