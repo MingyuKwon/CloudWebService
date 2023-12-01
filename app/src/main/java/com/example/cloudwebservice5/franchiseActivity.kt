@@ -48,7 +48,7 @@ class franchiseActivity : AppCompatActivity() {
     val MidCategorySaleArray = listOf<String>("(건강)식품", "기타도소매", "농수산물", "의류 / 패션", "종합소매점", "편의점", "화장품")
 
     val AreaArray = listOf<String>("강원", "경기", "경남", "경북", "광주", "대구", "대전", "부산", "서울", "울산", "인천", "전남", "전북", "충남", "충북" ,"제주","전체", "세종")
-    val yearitems = listOf<String>("2022", "2021", "2020", "2019", "2018")
+    val yearitems = listOf<String>("2022", "2021", "2020",)
     val emptyArray = listOf<String>("")
 
 

@@ -4,20 +4,28 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.cloudwebservice5.Data.StoreData
 import com.example.cloudwebservice5.Tools.RetrofitClient
 import com.example.cloudwebservice5.databinding.ActivityMainBinding
 import com.example.cloudwebservice5.databinding.ActivityMapBinding
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.coroutines.launch
 
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
 
-    val BigCategoryArray = listOf<String>("소매", "숙박", "음식", "예술·스포츠", "수리·개인")
+    val BigCategoryArray = listOf<String>("음식","소매", "숙박",  "예술·스포츠", "수리·개인")
 
     val Category1tArray = listOf<String>("" ,"자동차 부품 소매", "종합 소매", "음료 소매", "가전·통신 소매")
     val Category2tArray = listOf<String>("" ,"일반 숙박",)
@@ -51,6 +59,35 @@ class MapActivity : AppCompatActivity() {
         "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구",
         "용산구", "은평구", "종로구", "중구", "중랑구")
 
+    var positionHashMap = mapOf<String, LatLng>(
+        "강남구" to LatLng(37.517236, 127.047325 ),
+        "강동구" to LatLng(37.530125, 127.123762 ),
+        "강북구" to LatLng(37.639610, 127.025657 ),
+        "광진구" to LatLng(37.639610, 127.025657 ),
+        "강서구" to LatLng(37.550979, 126.849538 ),
+        "관악구" to LatLng(37.478406, 126.951613 ),
+        "노원구" to LatLng(37.538484, 127.082294 ),
+        "금천구" to LatLng(37.495403, 126.887369 ),
+        "구로구" to LatLng(37.456872, 126.895229 ),
+        "도봉구" to LatLng(37.654192, 127.056793 ),
+        "동대문구" to LatLng(37.574368, 127.040019 ),
+        "서대문구" to LatLng(37.579116, 126.936778 ),
+        "영등포구" to LatLng(37.526372, 126.896228 ),
+        "중구" to LatLng(37.564090, 126.997940 ),
+
+        "동작구" to LatLng(37.512402, 126.939252 ),
+        "마포구" to LatLng(37.566571, 126.901532 ),
+        "서초구" to LatLng(37.483712, 127.032411 ),
+        "성동구" to LatLng(37.563341, 127.037102 ),
+        "성북구" to LatLng(37.589116, 127.018214 ),
+        "송파구" to LatLng(37.514544, 127.106597 ),
+        "양천구" to LatLng(37.516872, 126.866399 ),
+        "용산구" to LatLng(37.538427, 126.965444 ),
+        "은평구" to LatLng(37.602696, 126.929112 ),
+        "종로구" to LatLng(37.572950, 126.979358 ),
+        "중랑구" to LatLng(37.606560, 127.092652 ),
+    )
+
     val areaSmallArray1 = listOf<String>("","도곡1동", "도곡2동", "일원본동", "수서동", "개포2동", "개포3동", "일원1동", "세곡동", "압구정동", "신사동", "논현1동" ,"논현2동" ,"대치1동" ,"대치2동" ,"대치4동" ,"삼성2동" ,"삼성1동" ,"청담동" ,"개포4동" ,"개포1동" ,"역삼1동" ,"역삼2동")
     val areaSmallArray2 = listOf<String>( "","강일동", "천호1동", "천호2동", "천호3동", "성내3동", "성내1동", "성내2동", "암사2동", "암사1동", "암사3동", "둔촌2동", "둔촌1동", "길동", "상일1동", "상일2동", "고덕2동", "고덕1동", "명일1동", "명일2동",)
     val areaSmallArray3 = listOf<String>( "", "우이동", "인수동", "수유3동", "수유1동", "수유2동", "번2동", "번1동", "번3동", "송중동", "미아동", "삼양동", "삼각산동", "송천동")
@@ -79,17 +116,6 @@ class MapActivity : AppCompatActivity() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     var context : Context = this
 
     var indsLclsNm : String? = "음식"
@@ -99,6 +125,16 @@ class MapActivity : AppCompatActivity() {
     var signguNm: String? = "광진구"
     var adongNm: String? = "자양3동"
 
+    private val markers = mutableListOf<Marker>()
+
+    fun ClearMarker()
+    {
+        for (marker in markers) {
+            marker.map = null // 마커 제거
+        }
+        markers.clear()
+    }
+
 
     lateinit var areaMidAdapter: ArrayAdapter<String>
     lateinit var areaSmallAdapter: ArrayAdapter<String>
@@ -106,6 +142,74 @@ class MapActivity : AppCompatActivity() {
     lateinit var BigCategoryAdapter: ArrayAdapter<String>
     lateinit var MidCategoryAdapter: ArrayAdapter<String>
     lateinit var SmallCategoryAdapter: ArrayAdapter<String>
+
+    fun CreateStoreMarker(data: StoreData): Marker {
+        val marker = Marker()
+        marker.position = LatLng(data.lat!!.toDouble(), data.lon!!.toDouble())
+        marker.icon = OverlayImage.fromResource(R.drawable.baseline_flag_circle_24)
+
+        marker.setOnClickListener {
+            if(marker.tag != null)
+            {
+                marker.icon = OverlayImage.fromResource(R.drawable.baseline_flag_circle_24)
+                marker.tag = null
+            }else
+            {
+                val inflater = LayoutInflater.from(context)
+                val markerView = inflater.inflate(R.layout.custom_marker, null)
+                val textView = markerView.findViewById<TextView>(R.id.storeName)
+                val imageView = markerView.findViewById<ImageView>(R.id.imageView)
+                textView.text = data.bizesNm
+                imageView.setImageResource(R.drawable.bigflag)
+                marker.icon = OverlayImage.fromView(markerView)
+                marker.tag = 1
+            }
+            true
+        }
+        return marker
+    }
+
+    fun updateData()
+    {
+        indsLclsNm = binding.categoryBigSpinner.selectedItem.toString()
+        indsMclsNm = binding.categoryMidSpinner.selectedItem.toString()
+        indsSclsNm = binding.categorySmallSpinner.selectedItem.toString()
+
+        signguNm= binding.areaMidSpinner.selectedItem.toString()
+        adongNm= binding.areaSmallSpinner.selectedItem.toString()
+
+        lifecycleScope.launch {
+            binding.loadingContainer.visibility = View.VISIBLE
+            val storeData = RetrofitClient.getStoreData(indsLclsNm, indsMclsNm, indsSclsNm, "서울특별시", signguNm, adongNm )
+            if (storeData != null) {
+                // recommendationData 처리
+                updateMap(storeData)
+            } else {
+                Log.e("storeData Error", "")
+            }
+            binding.loadingContainer.visibility = View.GONE
+        }
+
+    }
+
+    fun updateMap(data : List<StoreData?>)
+    {
+        val mapFragment = supportFragmentManager.findFragmentById(binding.map.id) as MapFragment?
+        mapFragment?.getMapAsync { mapView ->
+
+            mapView.cameraPosition = CameraPosition(positionHashMap.get(signguNm)!!, 12.0)
+            ClearMarker()
+
+            for(store in data)
+            {
+                val marker = CreateStoreMarker(store!!)
+                marker.map = mapView
+                markers.add(marker)
+            }
+
+            Log.e("count" , markers.size.toString())
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -462,34 +566,6 @@ class MapActivity : AppCompatActivity() {
             SmallCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             categorySmallSpinner.setAdapter(SmallCategoryAdapter)
         }
-    }
-
-    fun updateData()
-    {
-        indsLclsNm = binding.categoryBigSpinner.selectedItem.toString()
-        indsMclsNm = binding.categoryMidSpinner.selectedItem.toString()
-        indsSclsNm = binding.categorySmallSpinner.selectedItem.toString()
-
-        signguNm= binding.areaMidSpinner.selectedItem.toString()
-        adongNm= binding.areaSmallSpinner.selectedItem.toString()
-
-        lifecycleScope.launch {
-            binding.loadingContainer.visibility = View.VISIBLE
-            val storeData = RetrofitClient.getStoreData(indsLclsNm, indsMclsNm, indsSclsNm, "서울특별시", signguNm, adongNm )
-            if (storeData != null) {
-                // recommendationData 처리
-                updateMap(storeData)
-            } else {
-                Log.e("storeData Error", "")
-            }
-            binding.loadingContainer.visibility = View.GONE
-        }
-
-    }
-
-    fun updateMap(data : List<StoreData?>)
-    {
-
     }
 
 }
