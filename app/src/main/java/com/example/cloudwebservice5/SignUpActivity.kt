@@ -80,7 +80,7 @@ class SignUpActivity : AppCompatActivity() {
                 if(isCeo) {
                     var career = careerTextInputEditText.text.toString().toInt()
                     lifecycleScope.launch{
-                        val postSignUpResponse = RetrofitClient.signUpUser(userId,password,name,phoneNumber,isCeo,career)
+                        val postSignUpResponse = RetrofitClient.signUpUser(userId,password,name,phoneNumber,booleanToInt(isCeo),career)
                         if (postSignUpResponse != null) {
                             SharedPreferencesManager.setLoginInfo(this@SignUpActivity, userId)
                             Log.d("[SignUpActivity]", "message: ${postSignUpResponse.message}")
@@ -91,7 +91,7 @@ class SignUpActivity : AppCompatActivity() {
                     }
                 } else {
                     lifecycleScope.launch{
-                        val postSignUpResponse = RetrofitClient.signUpUser(userId,password,name,phoneNumber,isCeo, null)
+                        val postSignUpResponse = RetrofitClient.signUpUser(userId,password,name,phoneNumber,booleanToInt(isCeo), null)
                         if (postSignUpResponse != null) {
                             SharedPreferencesManager.setLoginInfo(this@SignUpActivity, userId)
                             Log.d("[SignUpActivity]", "message: ${postSignUpResponse.message}")
@@ -278,5 +278,9 @@ class SignUpActivity : AppCompatActivity() {
             // 기타 예외 처리
             e.printStackTrace()
         }
+    }
+
+    fun booleanToInt(b: Boolean): Int {
+        return if (b) 1 else 0
     }
 }

@@ -1,10 +1,7 @@
 package com.example.cloudwebservice5.Tools
 
 import android.util.Log
-import com.example.cloudwebservice5.Data.AuthResponse
-import com.example.cloudwebservice5.Data.RecommendationChargeData
-import com.example.cloudwebservice5.Data.RecommendationData
-import com.example.cloudwebservice5.Data.StoreData
+import com.example.cloudwebservice5.Data.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -157,7 +154,7 @@ class RetrofitClient {
             }
         }
 
-        suspend fun signUpUser(userId: String, password: String, name: String, phoneNumber: String, isCeo: Boolean, career: Int?): AuthResponse? {
+        suspend fun signUpUser(userId: String, password: String, name: String, phoneNumber: String, isCeo: Int, career: Int?): AuthResponse? {
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL_CONNECT_RDS)
@@ -198,11 +195,61 @@ class RetrofitClient {
                 if (response.isSuccessful) {
                     response.body()
                 } else {
-                    Log.e("signup Error", response.message())
+                    Log.e("signUpStore Error", response.message())
                     null
                 }
             } catch (e: Exception) {
-                Log.e("signup Error", e.message ?: "Unknown error")
+                Log.e("signUpStore Error", e.message ?: "Unknown error")
+                null
+            }
+        }
+
+        suspend fun getUsers(userId: String): List<CeoData> {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_CONNECT_RDS)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val authService = retrofit.create(AuthService::class.java)
+
+            return try {
+
+                val response = authService.getUsers(userId)
+                if (response.isSuccessful) {
+                    response.body() ?: emptyList()
+                } else {
+                    Log.e("getUsers Error", response.message())
+                    emptyList()
+                }
+            } catch (e: Exception) {
+                Log.e("getUsers Error", e.message ?: "Unknown error")
+                emptyList()
+            }
+        }
+
+        suspend fun getCeoStore(userId: String): CeoStoreData? {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_CONNECT_RDS)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val authService = retrofit.create(AuthService::class.java)
+
+            return try {
+
+                val response = authService.getCeoStore(userId)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("getCeoStore Error", response.message())
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("getCeoStore Error", e.message ?: "Unknown error")
                 null
             }
         }
@@ -247,7 +294,7 @@ interface AuthService {
         @Query("password") password: String,
         @Query("name") name: String,
         @Query("phone_number") phoneNumber: String,
-        @Query("is_ceo") isCeo: Boolean,
+        @Query("is_ceo") isCeo: Int,
         @Query("career") career: Int?
     ): Response<AuthResponse>
 
@@ -256,7 +303,17 @@ interface AuthService {
         @Query("name") name: String,
         @Query("description") description: String,
         @Query("address") address: String,
-        @Query("annual_revenue") annual_revenue: Int,
+        @Query("annual_revenue") annualRevenue: Int,
         @Query("user_id") userId: String
     ): Response<AuthResponse>
+
+    @GET("user")
+    suspend fun getUsers(
+        @Query("user_id") userId: String
+    ): Response<List<CeoData>>
+
+    @GET("user/store")
+    suspend fun getCeoStore(
+        @Query("user_id") userId: String
+    ): Response<CeoStoreData>
 }

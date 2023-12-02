@@ -37,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
                     if (postLoginResponse != null) {
                         SharedPreferencesManager.setLoginInfo(this@LoginActivity, userId)
                         Log.d("[LoginActivity]", "message: ${postLoginResponse.message}")
+                        moveToOtherActivity("ChatActivity", userId)
                     } else {
                         Log.e("login Error", "")
                     }
@@ -80,5 +81,21 @@ class LoginActivity : AppCompatActivity() {
         val regex = Regex("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,12}$")
         if(regex.matches(userId)) return true
         return false
+    }
+
+    fun moveToOtherActivity(activityName: String, userId: String) {
+        try {
+            var realactivityName  = "com.example.cloudwebservice5." + activityName
+            val activityClass = Class.forName(realactivityName).kotlin.java
+            val intent = Intent(this, activityClass)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        } catch (e: ClassNotFoundException) {
+            // 클래스가 찾을 수 없는 경우의 처리
+            e.printStackTrace()
+        } catch (e: Exception) {
+            // 기타 예외 처리
+            e.printStackTrace()
+        }
     }
 }
