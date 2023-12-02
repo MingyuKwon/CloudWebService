@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cloudwebservice5.Data.CeoData
 import com.example.cloudwebservice5.databinding.ItemCeoBinding
 
-class ChatAdapter(val items: List<CeoData>) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+class CeoAdapter(val items: List<CeoData>) : RecyclerView.Adapter<CeoAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(data: CeoData, pos: Int)
@@ -22,12 +22,12 @@ class ChatAdapter(val items: List<CeoData>) : RecyclerView.Adapter<ChatAdapter.V
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CeoAdapter.ViewHolder {
         val view = ItemCeoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CeoAdapter.ViewHolder, position: Int) {
         holder.binding.nameTextView.text = items[position].name
         holder.binding.phoneNumberTextView.text = items[position].phone_number
         holder.binding.careerTextView.text = items[position].career.toString()

@@ -278,6 +278,31 @@ class RetrofitClient {
                 null
             }
         }
+
+        suspend fun getMessages(receiverId: String): List<MessageData> {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_CONNECT_RDS)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val authService = retrofit.create(AuthService::class.java)
+
+            return try {
+
+                val response = authService.getMessages(receiverId)
+                if (response.isSuccessful) {
+                    response.body() ?: emptyList()
+                } else {
+                    Log.e("getMessages Error", response.message())
+                    emptyList()
+                }
+            } catch (e: Exception) {
+                Log.e("getMessages Error", e.message ?: "Unknown error")
+                emptyList()
+            }
+        }
 }
 
 }
@@ -349,4 +374,9 @@ interface AuthService {
         @Query("sender_id") senderId: String,
         @Query("receiver_id") receiverId: String
     ): Response<AuthResponse>
+
+    @GET("user/message")
+    suspend fun getMessages(
+        @Query("receiver_id") receiverId: String
+    ): Response<List<MessageData>>
 }

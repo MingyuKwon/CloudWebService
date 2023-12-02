@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.example.cloudwebservice5.Tools.RetrofitClient
@@ -39,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d("[LoginActivity]", "message: ${postLoginResponse.message}")
                         moveToOtherActivity("UserActivity", userId)
                     } else {
+                        Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                         Log.e("login Error", "")
                     }
                 }
@@ -57,12 +59,12 @@ class LoginActivity : AppCompatActivity() {
             }
 
             passwordEditText.addTextChangedListener {
-                if (passwordEditText.text.length < 8) {
-                    loginBtn.isClickable = false
-                    loginBtn.isEnabled = false
-                } else if(idEditText.text.isNotEmpty()) {
+                if (passwordEditText.text.length >= 8 && idEditText.text.length >= 8) {
                     loginBtn.isClickable = true
                     loginBtn.isEnabled = true
+                } else {
+                    loginBtn.isClickable = false
+                    loginBtn.isEnabled = false
                 }
             }
         }
