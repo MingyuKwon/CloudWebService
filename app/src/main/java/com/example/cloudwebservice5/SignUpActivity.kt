@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.example.cloudwebservice5.Tools.RetrofitClient
@@ -86,6 +87,7 @@ class SignUpActivity : AppCompatActivity() {
                             Log.d("[SignUpActivity]", "message: ${postSignUpResponse.message}")
                             moveToOtherActivity("CeoSignUpActivity", userId)
                         } else {
+                            Toast.makeText(this@SignUpActivity, "이미 가입된 아이디입니다.", Toast.LENGTH_SHORT).show()
                             Log.e("signup Error", "")
                         }
                     }
@@ -97,6 +99,7 @@ class SignUpActivity : AppCompatActivity() {
                             Log.d("[SignUpActivity]", "message: ${postSignUpResponse.message}")
                             moveToOtherActivity("UserActivity", userId)
                         } else {
+                            Toast.makeText(this@SignUpActivity, "이미 가입된 아이디입니다.", Toast.LENGTH_SHORT).show()
                             Log.e("signup Error", "")
                         }
                     }

@@ -42,7 +42,7 @@ class ChatActivity : AppCompatActivity() {
                     val response = RetrofitClient.sendMessage(title, content, senderId!!, receiverId!!)
                     if (response != null) {
                         Log.d("[ChatActivity]", "message: ${response.message}")
-                        Toast.makeText(this@ChatActivity, "메시지가 전송되었습니다.", Toast.LENGTH_SHORT)
+                        Toast.makeText(this@ChatActivity, "메시지가 전송되었습니다.", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
                         Log.e("Send Message Error", "")

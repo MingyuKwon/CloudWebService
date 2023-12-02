@@ -91,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
             val activityClass = Class.forName(realactivityName).kotlin.java
             val intent = Intent(this, activityClass)
             intent.putExtra("userId", userId)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
         } catch (e: ClassNotFoundException) {
             // 클래스가 찾을 수 없는 경우의 처리

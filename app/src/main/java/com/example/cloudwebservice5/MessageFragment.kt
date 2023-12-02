@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cloudwebservice5.Data.CeoData
@@ -55,6 +56,7 @@ class MessageFragment : Fragment() {
                     Log.d("[MessageFragment]","name: ${message.name}, id:${message.id}, title: ${message.title}, content: ${message.content}")
                 }
             } else {
+                Toast.makeText(context, "받은 메시지가 없습니다.", Toast.LENGTH_SHORT).show()
                 Log.e("getUser Error", "")
             }
             initRecycler()

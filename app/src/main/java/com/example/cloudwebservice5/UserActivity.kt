@@ -1,5 +1,6 @@
 package com.example.cloudwebservice5
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.cloudwebservice5.databinding.ActivityUserBinding
@@ -51,6 +52,22 @@ class UserActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        try {
+            var realactivityName  = "com.example.cloudwebservice5." + "LoginActivity"
+            val activityClass = Class.forName(realactivityName).kotlin.java
+            val intent = Intent(this, activityClass)
+            startActivity(intent)
+        } catch (e: ClassNotFoundException) {
+            // 클래스가 찾을 수 없는 경우의 처리
+            e.printStackTrace()
+        } catch (e: Exception) {
+            // 기타 예외 처리
+            e.printStackTrace()
         }
     }
 
