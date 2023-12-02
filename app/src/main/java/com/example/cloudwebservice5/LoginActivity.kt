@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
                         SharedPreferencesManager.setLoginInfo(this@LoginActivity, userId)
                         Log.d("[LoginActivity]", "message: ${postLoginResponse.message}")
                     } else {
-                        Log.e("recommendationData Error", "")
+                        Log.e("login Error", "")
                     }
                 }
             }

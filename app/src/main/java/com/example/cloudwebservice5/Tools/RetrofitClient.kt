@@ -1,13 +1,11 @@
 package com.example.cloudwebservice5.Tools
 
 import android.util.Log
-import com.example.cloudwebservice5.Data.PostLoginResponse
+import com.example.cloudwebservice5.Data.AuthResponse
 import com.example.cloudwebservice5.Data.RecommendationChargeData
 import com.example.cloudwebservice5.Data.RecommendationData
 import com.example.cloudwebservice5.Data.StoreData
-import okhttp3.FormBody
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -25,7 +23,7 @@ class RetrofitClient {
     companion object {
         private var retrofitRecommend: Retrofit? = null
         private var retrofitAnaly: Retrofit? = null
-        private var retrofitLogin: Retrofit? = null
+
         private val BASE_URL_Recommen = "https://bj3i65gheg.execute-api.ap-northeast-2.amazonaws.com/"
         private val BASE_URL_Analy = "https://p8hwrsdfgk.execute-api.ap-northeast-2.amazonaws.com/"
         private val BASE_URL_CONNECT_RDS = "https://fzamwlgtkd.execute-api.ap-northeast-2.amazonaws.com/2023-11-13/"
@@ -79,42 +77,6 @@ class RetrofitClient {
             }
             return retrofitRecommend
         }
-
-//        fun getClientLogin(): Retrofit? {
-//            if (retrofitLogin == null) {
-//                // Retrofit 인스턴스 생성
-//                val logging = HttpLoggingInterceptor()
-//                logging.setLevel(HttpLoggingInterceptor.Level.BODY) // 로그 레벨 설정
-//
-//                val unsafeOkHttpClient = OkHttpClient.Builder().apply {
-//                    // Create a trust manager that does not validate certificate chains
-//                    val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-//                        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
-//                        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
-//                        override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
-//                    })
-//
-//                    // Install the all-trusting trust manager
-//                    val sslContext = SSLContext.getInstance("SSL").apply {
-//                        init(null, trustAllCerts, java.security.SecureRandom())
-//                    }
-//                    sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
-//
-//                    // Don't check Hostnames, either.
-//                    // CAUTION: This makes the connection vulnerable to MITM attacks!
-//                    hostnameVerifier { _, _ -> true }
-//                    addInterceptor(logging)
-//                }.build()
-//
-//
-//                retrofitLogin = Retrofit.Builder()
-//                    .baseUrl(BASE_URL_CONNECT_RDS)
-//                    .client(unsafeOkHttpClient)
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build()
-//            }
-//            return retrofitLogin
-//        }
 
         suspend fun getRecommendData(region: String?, largeBusiness: String?, mdBusiness: String?, year: String? = "2022"): RecommendationData? {
             val service = getClientRecommend()!!.create(getRecommendation::class.java)
@@ -170,10 +132,10 @@ class RetrofitClient {
 
         }
 
-        suspend fun loginUser(userId: String, password: String): PostLoginResponse? {
+        suspend fun loginUser(userId: String, password: String): AuthResponse? {
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://fzamwlgtkd.execute-api.ap-northeast-2.amazonaws.com/2023-11-13/")
+                .baseUrl(BASE_URL_CONNECT_RDS)
                 .client(unsafeOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -195,23 +157,30 @@ class RetrofitClient {
             }
         }
 
-//        suspend fun loginUser(userId: String, password: String): PostLoginResponse? {
-//            val authService = getClientLogin()!!.create(AuthService::class.java)
-//
-//            return try {
-//
-//                val response = authService.login(userId, password)
-//                if (response.isSuccessful) {
-//                    response.body()
-//                } else {
-//                    Log.e("loginUser Error", response.message())
-//                    null
-//                }
-//            } catch (e: Exception) {
-//                Log.e("loginUser Error", e.message ?: "Unknown error")
-//                null
-//            }
-//        }
+        suspend fun signUpUser(userId: String, password: String, name: String, phoneNumber: String, isCeo: Boolean, career: Int?): AuthResponse? {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_CONNECT_RDS)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val authService = retrofit.create(AuthService::class.java)
+
+            return try {
+
+                val response = authService.signup(userId, password, name, phoneNumber, isCeo, career)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("signup Error", response.message())
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("signup Error", e.message ?: "Unknown error")
+                null
+            }
+        }
 }
 
 }
@@ -245,5 +214,15 @@ interface AuthService {
     suspend fun login(
         @Query("user_id") userId: String,
         @Query("password") password: String
-    ): Response<PostLoginResponse>
+    ): Response<AuthResponse>
+
+    @POST("auth/signup")
+    suspend fun signup(
+        @Query("user_id") userId: String,
+        @Query("password") password: String,
+        @Query("name") name: String,
+        @Query("phone_number") phoneNumber: String,
+        @Query("is_ceo") isCeo: Boolean,
+        @Query("career") career: Int?
+    ): Response<AuthResponse>
 }

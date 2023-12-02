@@ -1,5 +1,5 @@
 package com.example.cloudwebservice5.Data
 
-class PostLoginResponse {
+class AuthResponse {
     var message: String ?= null
 }
