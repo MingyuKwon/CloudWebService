@@ -259,7 +259,7 @@ class SignUpActivity : AppCompatActivity() {
         return regex.matches(phoneNumber)
     }
 
-    fun flagCheck() {
+    private fun flagCheck() {
         binding.signUpBtn.isEnabled = idFlag && passwordFlag && phoneNumberFlag && nameFlag && careerFlag
         binding.signUpBtn.isClickable = idFlag && passwordFlag && phoneNumberFlag && nameFlag && careerFlag
     }
