@@ -253,6 +253,31 @@ class RetrofitClient {
                 null
             }
         }
+
+        suspend fun sendMessage(title: String, content: String, senderId: String, receiverId: String): AuthResponse? {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_CONNECT_RDS)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val authService = retrofit.create(AuthService::class.java)
+
+            return try {
+
+                val response = authService.sendMessage(title, content, senderId, receiverId)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("sendMessage Error", response.message())
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("sendMessage Error", e.message ?: "Unknown error")
+                null
+            }
+        }
 }
 
 }
@@ -316,4 +341,12 @@ interface AuthService {
     suspend fun getCeoStore(
         @Query("user_id") userId: String
     ): Response<CeoStoreData>
+
+    @POST("user/message")
+    suspend fun sendMessage(
+        @Query("title") title: String,
+        @Query("content") content: String,
+        @Query("sender_id") senderId: String,
+        @Query("receiver_id") receiverId: String
+    ): Response<AuthResponse>
 }

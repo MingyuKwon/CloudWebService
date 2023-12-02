@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
                     if (postLoginResponse != null) {
                         SharedPreferencesManager.setLoginInfo(this@LoginActivity, userId)
                         Log.d("[LoginActivity]", "message: ${postLoginResponse.message}")
-                        moveToOtherActivity("ChatActivity", userId)
+                        moveToOtherActivity("UserActivity", userId)
                     } else {
                         Log.e("login Error", "")
                     }

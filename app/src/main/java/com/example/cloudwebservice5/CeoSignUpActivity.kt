@@ -51,7 +51,7 @@ class CeoSignUpActivity : AppCompatActivity() {
                     val postSignUpStoreResponse = RetrofitClient.signUpStore(name,description,address,annualRevenue,userId)
                     if (postSignUpStoreResponse != null) {
                         Log.d("[SignUpActivity]", "message: ${postSignUpStoreResponse.message}")
-                        moveToOtherActivity("ChatActivity", userId)
+                        moveToOtherActivity("UserActivity", userId)
                     } else {
                         Log.e("signup Error", "")
                     }

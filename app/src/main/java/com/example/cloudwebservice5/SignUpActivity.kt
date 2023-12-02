@@ -95,7 +95,7 @@ class SignUpActivity : AppCompatActivity() {
                         if (postSignUpResponse != null) {
                             SharedPreferencesManager.setLoginInfo(this@SignUpActivity, userId)
                             Log.d("[SignUpActivity]", "message: ${postSignUpResponse.message}")
-                            moveToOtherActivity("ChatActivity", userId)
+                            moveToOtherActivity("UserActivity", userId)
                         } else {
                             Log.e("signup Error", "")
                         }
