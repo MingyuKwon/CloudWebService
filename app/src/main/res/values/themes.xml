@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.CloudWebService5" parent="Base.Theme.CloudWebService5" />
+    <style name="TextLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>
