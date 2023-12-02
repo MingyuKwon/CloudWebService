@@ -181,6 +181,31 @@ class RetrofitClient {
                 null
             }
         }
+
+        suspend fun signUpStore(name: String, description: String, address: String, annual_revenue: Int, userId: String): AuthResponse? {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_CONNECT_RDS)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val authService = retrofit.create(AuthService::class.java)
+
+            return try {
+
+                val response = authService.signupStore(name, description, address, annual_revenue, userId)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("signup Error", response.message())
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("signup Error", e.message ?: "Unknown error")
+                null
+            }
+        }
 }
 
 }
@@ -224,5 +249,14 @@ interface AuthService {
         @Query("phone_number") phoneNumber: String,
         @Query("is_ceo") isCeo: Boolean,
         @Query("career") career: Int?
+    ): Response<AuthResponse>
+
+    @POST("auth/signup/store")
+    suspend fun signupStore(
+        @Query("name") name: String,
+        @Query("description") description: String,
+        @Query("address") address: String,
+        @Query("annual_revenue") annual_revenue: Int,
+        @Query("user_id") userId: String
     ): Response<AuthResponse>
 }

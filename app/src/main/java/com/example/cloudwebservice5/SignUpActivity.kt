@@ -84,22 +84,22 @@ class SignUpActivity : AppCompatActivity() {
                         if (postSignUpResponse != null) {
                             SharedPreferencesManager.setLoginInfo(this@SignUpActivity, userId)
                             Log.d("[SignUpActivity]", "message: ${postSignUpResponse.message}")
+                            moveToOtherActivity("CeoSignUpActivity", userId)
                         } else {
                             Log.e("signup Error", "")
                         }
                     }
-                    moveToOtherActivity("CeoSignUpActivity")
                 } else {
                     lifecycleScope.launch{
                         val postSignUpResponse = RetrofitClient.signUpUser(userId,password,name,phoneNumber,isCeo, null)
                         if (postSignUpResponse != null) {
                             SharedPreferencesManager.setLoginInfo(this@SignUpActivity, userId)
                             Log.d("[SignUpActivity]", "message: ${postSignUpResponse.message}")
+                            moveToOtherActivity("ChatActivity", userId)
                         } else {
                             Log.e("signup Error", "")
                         }
                     }
-                    moveToOtherActivity("ChatActivity")
                 }
             }
         }
@@ -264,11 +264,12 @@ class SignUpActivity : AppCompatActivity() {
         binding.signUpBtn.isClickable = idFlag && passwordFlag && phoneNumberFlag && nameFlag && careerFlag
     }
 
-    fun moveToOtherActivity(activityName: String) {
+    fun moveToOtherActivity(activityName: String, userId: String) {
         try {
             var realactivityName  = "com.example.cloudwebservice5." + activityName
             val activityClass = Class.forName(realactivityName).kotlin.java
             val intent = Intent(this, activityClass)
+            intent.putExtra("userId", userId)
             startActivity(intent)
         } catch (e: ClassNotFoundException) {
             // 클래스가 찾을 수 없는 경우의 처리
