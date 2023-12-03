@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragment_search"
+        android:title="조회"
+        android:icon="@drawable/baseline_search_24"/>
+    <item
+        android:id="@+id/fragment_message"
+        android:title="메시지"
+        android:icon="@drawable/baseline_message_24"/>
+</menu>
