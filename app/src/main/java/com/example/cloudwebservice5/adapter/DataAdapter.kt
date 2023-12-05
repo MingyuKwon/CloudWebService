@@ -3,6 +3,7 @@ package com.example.cloudwebservice5.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cloudwebservice5.Data.Data
 import com.example.cloudwebservice5.databinding.RowDataBinding
 
 class DataAdapter(val items: List<String>) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {

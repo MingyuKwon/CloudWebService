@@ -8,13 +8,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cloudwebservice5.Data.Data
 import com.example.cloudwebservice5.Tools.RetrofitClient
-import com.example.cloudwebservice5.Tools.RetrofitClient.Companion.downloadAndSaveFile
 import com.example.cloudwebservice5.adapter.DataAdapter
 import com.example.cloudwebservice5.databinding.ActivityDataRoomBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DataRoomActivity : AppCompatActivity() {
