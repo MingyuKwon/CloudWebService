@@ -1,5 +1,6 @@
 package com.example.cloudwebservice5
 
+import DownloadFileTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,9 +29,8 @@ class DataRoomActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getDataList()
-        CoroutineScope(Dispatchers.IO).launch {
-            downloadAndSaveFile(applicationContext, "기본 동작 테스트.txt")
-        }
+
+
     }
 
     private fun getDataList() {
@@ -61,8 +61,9 @@ class DataRoomActivity : AppCompatActivity() {
 
             adapter.itemClickListener = object : DataAdapter.OnItemClickListener {
                 override fun onItemClick(data: String, pos: Int) {
-                    lifecycleScope.launch{
-
+                    lifecycleScope.launch {
+                        val downloadFileTask = DownloadFileTask(this@DataRoomActivity, data)
+                        downloadFileTask.execute()
                     }
                 }
             }

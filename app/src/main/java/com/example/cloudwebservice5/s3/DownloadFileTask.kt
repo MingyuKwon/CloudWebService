@@ -22,7 +22,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class DownloadFileTask(private val context: Context) : AsyncTask<Void, Void, Void>() {
+class DownloadFileTask(private val context: Context, private val fileName: String) : AsyncTask<Void, Void, Void>() {
 
     private val BASE_URL_DOWNLOAD = "https://fgyw5cdf02.execute-api.ap-northeast-2.amazonaws.com/"
     // SSL 트러스트 매니저 배열 정의
@@ -32,13 +32,13 @@ class DownloadFileTask(private val context: Context) : AsyncTask<Void, Void, Voi
         override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
     })
 
-    override fun doInBackground(vararg params: Void?): Void? {
+    public override fun doInBackground(vararg params: Void?): Void? {
         runBlocking {
             try {
                 val retrofit = createUnsafeRetrofit(BASE_URL_DOWNLOAD)
                 val service = retrofit.create(DownloadService::class.java)
 
-                val response = service.downloadFile("asdf.csv")
+                val response = service.downloadFile(fileName)
                 if (response.isSuccessful) {
                     val base64Data = response.body()?.string()
                     if (!base64Data.isNullOrBlank()) {
