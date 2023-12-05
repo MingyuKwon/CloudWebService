@@ -1,8 +1,11 @@
 package com.example.cloudwebservice5.Tools
 
+import android.content.Context
+import android.os.Environment.DIRECTORY_DOCUMENTS
 import android.util.Log
 import com.example.cloudwebservice5.Data.*
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -10,6 +13,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import java.io.File
+import java.io.FileOutputStream
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -21,9 +26,13 @@ class RetrofitClient {
         private var retrofitRecommend: Retrofit? = null
         private var retrofitAnaly: Retrofit? = null
 
-        private val BASE_URL_Recommen = "https://bj3i65gheg.execute-api.ap-northeast-2.amazonaws.com/"
+        private val BASE_URL_Recommen =
+            "https://bj3i65gheg.execute-api.ap-northeast-2.amazonaws.com/"
         private val BASE_URL_Analy = "https://p8hwrsdfgk.execute-api.ap-northeast-2.amazonaws.com/"
-        private val BASE_URL_CONNECT_RDS = "https://fzamwlgtkd.execute-api.ap-northeast-2.amazonaws.com/2023-11-13/"
+        private val BASE_URL_CONNECT_RDS =
+            "https://fzamwlgtkd.execute-api.ap-northeast-2.amazonaws.com/2023-11-13/"
+        private val BASE_URL_S3 =
+            "https://fgyw5cdf02.execute-api.ap-northeast-2.amazonaws.com/"
 
         val logging = HttpLoggingInterceptor()
 
@@ -75,7 +84,12 @@ class RetrofitClient {
             return retrofitRecommend
         }
 
-        suspend fun getRecommendData(region: String?, largeBusiness: String?, mdBusiness: String?, year: String? = "2022"): RecommendationData? {
+        suspend fun getRecommendData(
+            region: String?,
+            largeBusiness: String?,
+            mdBusiness: String?,
+            year: String? = "2022"
+        ): RecommendationData? {
             val service = getClientRecommend()!!.create(getRecommendation::class.java)
 
             return try {
@@ -93,7 +107,10 @@ class RetrofitClient {
         }
 
 
-        suspend fun getRecommendChargeData(brandName: String?, year: String? = "2022"): RecommendationChargeData? {
+        suspend fun getRecommendChargeData(
+            brandName: String?,
+            year: String? = "2022"
+        ): RecommendationChargeData? {
             val service = getClientRecommend()!!.create(getRecommendationCharge::class.java)
 
             return try {
@@ -111,11 +128,25 @@ class RetrofitClient {
 
         }
 
-        suspend fun getStoreData( largeBusiness: String?, mdBusiness: String?, smallBusiness: String?, ctprvnNm: String?, signguNm: String?  = "", adongNm: String? = "" ): List<StoreData>? {
+        suspend fun getStoreData(
+            largeBusiness: String?,
+            mdBusiness: String?,
+            smallBusiness: String?,
+            ctprvnNm: String?,
+            signguNm: String? = "",
+            adongNm: String? = ""
+        ): List<StoreData>? {
             val service = getClientAnaly()!!.create(getStore::class.java)
 
             return try {
-                val response = service.getData(ctprvnNm, signguNm , adongNm, largeBusiness, mdBusiness, smallBusiness)
+                val response = service.getData(
+                    ctprvnNm,
+                    signguNm,
+                    adongNm,
+                    largeBusiness,
+                    mdBusiness,
+                    smallBusiness
+                )
                 if (response.isSuccessful) {
                     response.body()
                 } else {
@@ -154,7 +185,14 @@ class RetrofitClient {
             }
         }
 
-        suspend fun signUpUser(userId: String, password: String, name: String, phoneNumber: String, isCeo: Int, career: Int?): AuthResponse? {
+        suspend fun signUpUser(
+            userId: String,
+            password: String,
+            name: String,
+            phoneNumber: String,
+            isCeo: Int,
+            career: Int?
+        ): AuthResponse? {
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL_CONNECT_RDS)
@@ -166,7 +204,8 @@ class RetrofitClient {
 
             return try {
 
-                val response = authService.signup(userId, password, name, phoneNumber, isCeo, career)
+                val response =
+                    authService.signup(userId, password, name, phoneNumber, isCeo, career)
                 if (response.isSuccessful) {
                     response.body()
                 } else {
@@ -179,7 +218,13 @@ class RetrofitClient {
             }
         }
 
-        suspend fun signUpStore(name: String, description: String, address: String, annual_revenue: Int, userId: String): AuthResponse? {
+        suspend fun signUpStore(
+            name: String,
+            description: String,
+            address: String,
+            annual_revenue: Int,
+            userId: String
+        ): AuthResponse? {
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL_CONNECT_RDS)
@@ -191,7 +236,8 @@ class RetrofitClient {
 
             return try {
 
-                val response = authService.signupStore(name, description, address, annual_revenue, userId)
+                val response =
+                    authService.signupStore(name, description, address, annual_revenue, userId)
                 if (response.isSuccessful) {
                     response.body()
                 } else {
@@ -254,7 +300,12 @@ class RetrofitClient {
             }
         }
 
-        suspend fun sendMessage(title: String, content: String, senderId: String, receiverId: String): AuthResponse? {
+        suspend fun sendMessage(
+            title: String,
+            content: String,
+            senderId: String,
+            receiverId: String
+        ): AuthResponse? {
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL_CONNECT_RDS)
@@ -303,32 +354,110 @@ class RetrofitClient {
                 emptyList()
             }
         }
-}
+
+        suspend fun getDataList(): List<String>? {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_CONNECT_RDS)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val authService = retrofit.create(S3Service::class.java)
+
+            return try {
+
+                val response = authService.getDataList()
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("getDataList Error", response.message())
+                    emptyList();
+                }
+            } catch (e: Exception) {
+                Log.e("getDataList Error", e.message ?: "Unknown error")
+                emptyList();
+            }
+        }
+
+        // 코루틴을 사용하여 비동기적으로 파일 다운로드
+        suspend fun downloadFile(filename: String): ByteArray? {
+            return try {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(BASE_URL_S3)
+                    .client(unsafeOkHttpClient)
+                    .build()
+
+                val s3Service = retrofit.create(S3Service::class.java)
+
+                s3Service.downloadFile(filename)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
+
+        suspend fun exampleUsage(context: Context) {
+            val filename = "asdf.csv"
+            val fileData = downloadFile(filename)
+
+            if (fileData != null) {
+                // 파일 다운로드 성공
+                // 이제 fileData를 사용하거나 저장할 수 있습니다.
+                saveFileLocally(context, filename, fileData)
+            } else {
+                // 파일 다운로드 실패
+            }
+        }
+
+        private fun saveFileLocally(context: Context, filename: String, fileData: ByteArray) {
+            try {
+                // 예시: 앱 내부 저장소에 파일 저장
+                val file = File(context.getExternalFilesDir(DIRECTORY_DOCUMENTS), filename)
+                val fos = FileOutputStream(file)
+                fos.write(fileData)
+                fos.close()
+
+                // 이제 'file' 변수에 저장된 파일을 사용하면 됩니다.
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // 파일 저장 중 오류 발생
+            }
+        }
+
+
+    }
 
 }
 
 interface getRecommendation {
     @GET("franchise/recommendation")
-    suspend fun getData(@Query("region") region: String?,
-                @Query("largeBusiness") largeBusiness: String?,
-                @Query("mdBusiness") mdBusiness: String?,
-                @Query("year") year: String? ): Response<RecommendationData>
+    suspend fun getData(
+        @Query("region") region: String?,
+        @Query("largeBusiness") largeBusiness: String?,
+        @Query("mdBusiness") mdBusiness: String?,
+        @Query("year") year: String?
+    ): Response<RecommendationData>
 }
 
 interface getRecommendationCharge {
     @GET("franchise/brand-charges")
-    suspend fun getData(@Query("brandName") brandName: String?,
-                @Query("year") year: String? ): Response<RecommendationChargeData>
+    suspend fun getData(
+        @Query("brandName") brandName: String?,
+        @Query("year") year: String?
+    ): Response<RecommendationChargeData>
 }
 
 interface getStore {
     @GET("smallBusiness/analysis")
-    suspend fun getData(@Query("ctprvnNm") ctprvnNm: String?,
-                        @Query("signguNm") signguNm: String?,
-                        @Query("adongNm") adongNm: String?,
-                        @Query("largeBusiness") largeBusiness: String?,
-                        @Query("mdBusiness") mdBusiness: String?,
-                        @Query("smallBusiness") smallBusiness: String? ): Response<List<StoreData>>
+    suspend fun getData(
+        @Query("ctprvnNm") ctprvnNm: String?,
+        @Query("signguNm") signguNm: String?,
+        @Query("adongNm") adongNm: String?,
+        @Query("largeBusiness") largeBusiness: String?,
+        @Query("mdBusiness") mdBusiness: String?,
+        @Query("smallBusiness") smallBusiness: String?
+    ): Response<List<StoreData>>
 }
 
 interface AuthService {
@@ -379,4 +508,15 @@ interface AuthService {
     suspend fun getMessages(
         @Query("receiver_id") receiverId: String
     ): Response<List<MessageData>>
+}
+
+interface S3Service {
+    @GET()
+    suspend fun downloadFile(
+        @Query("filename") filename: String
+    ): ByteArray
+
+    @GET("getDataList")
+    suspend fun getDataList(
+    ): Response<List<String>>
 }
