@@ -1,13 +1,17 @@
 package com.example.cloudwebservice5
 
+import DownloadFileTask
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.example.cloudwebservice5.Tools.RetrofitClient
 import com.example.cloudwebservice5.common.SharedPreferencesManager
 import com.example.cloudwebservice5.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -27,9 +31,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             DataRoomButton.setOnClickListener {
-                lifecycleScope.launch{
-                    RetrofitClient.getStoreData("음식", "한식", "","서울특별시" )
-                }
+                moveToOtherActivity("DataRoomActivity")
             }
 
             mentoringButton.setOnClickListener {
@@ -62,4 +64,6 @@ class MainActivity : AppCompatActivity() {
         SharedPreferencesManager.clearPreferences(this)
         super.onDestroy()
     }
+
+
 }
