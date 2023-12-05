@@ -32,7 +32,7 @@ class RetrofitClient {
         private val BASE_URL_CONNECT_RDS =
             "https://fzamwlgtkd.execute-api.ap-northeast-2.amazonaws.com/2023-11-13/"
         private val BASE_URL_S3 =
-            "https://fgyw5cdf02.execute-api.ap-northeast-2.amazonaws.com/"
+            "https://fgyw5cdf02.execute-api.ap-northeast-2.amazonaws.com/s3/"
 
         val logging = HttpLoggingInterceptor()
 
@@ -358,7 +358,7 @@ class RetrofitClient {
         suspend fun getDataList(): List<String>? {
 
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL_CONNECT_RDS)
+                .baseUrl(BASE_URL_S3)
                 .client(unsafeOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -380,50 +380,41 @@ class RetrofitClient {
             }
         }
 
-        // 코루틴을 사용하여 비동기적으로 파일 다운로드
-        suspend fun downloadFile(filename: String): ByteArray? {
-            return try {
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_URL_S3)
-                    .client(unsafeOkHttpClient)
-                    .build()
+        suspend fun downloadAndSaveFile(context: Context, fileName: String) {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL_S3)
+                .client(unsafeOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
-                val s3Service = retrofit.create(S3Service::class.java)
+            val authService = retrofit.create(S3Service::class.java)
 
-                s3Service.downloadFile(filename)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        }
-
-        suspend fun exampleUsage(context: Context) {
-            val filename = "asdf.csv"
-            val fileData = downloadFile(filename)
-
-            if (fileData != null) {
-                // 파일 다운로드 성공
-                // 이제 fileData를 사용하거나 저장할 수 있습니다.
-                saveFileLocally(context, filename, fileData)
-            } else {
-                // 파일 다운로드 실패
-            }
-        }
-
-        private fun saveFileLocally(context: Context, filename: String, fileData: ByteArray) {
             try {
-                // 예시: 앱 내부 저장소에 파일 저장
-                val file = File(context.getExternalFilesDir(DIRECTORY_DOCUMENTS), filename)
-                val fos = FileOutputStream(file)
-                fos.write(fileData)
-                fos.close()
+                Log.e("NONONONONONONON", "1")
+                val responseBody = authService.downloadFile(fileName)
+                Log.e("NONONONONONONON", "2")
 
-                // 이제 'file' 변수에 저장된 파일을 사용하면 됩니다.
+                saveFileToInternalStorage(context, responseBody, fileName)
             } catch (e: Exception) {
+                // 오류 처리
                 e.printStackTrace()
-                // 파일 저장 중 오류 발생
             }
         }
+
+        fun saveFileToInternalStorage(context: Context, responseBody: ResponseBody, fileName: String) {
+            Log.e("NONONONONONONON", "3")
+
+            context.openFileOutput(fileName, Context.MODE_PRIVATE).use { outputStream ->
+                val inputStream = responseBody.byteStream()
+                val buffer = ByteArray(4 * 1024)
+                var read: Int
+                while (inputStream.read(buffer).also { read = it } != -1) {
+                    outputStream.write(buffer, 0, read)
+                }
+                outputStream.flush()
+            }
+        }
+
 
 
     }
@@ -511,10 +502,10 @@ interface AuthService {
 }
 
 interface S3Service {
-    @GET()
+    @GET("download")
     suspend fun downloadFile(
         @Query("filename") filename: String
-    ): ByteArray
+    ): ResponseBody
 
     @GET("getDataList")
     suspend fun getDataList(

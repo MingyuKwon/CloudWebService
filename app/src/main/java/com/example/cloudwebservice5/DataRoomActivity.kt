@@ -3,13 +3,17 @@ package com.example.cloudwebservice5
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cloudwebservice5.Data.Data
 import com.example.cloudwebservice5.Tools.RetrofitClient
+import com.example.cloudwebservice5.Tools.RetrofitClient.Companion.downloadAndSaveFile
 import com.example.cloudwebservice5.adapter.DataAdapter
 import com.example.cloudwebservice5.databinding.ActivityDataRoomBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DataRoomActivity : AppCompatActivity() {
@@ -24,11 +28,15 @@ class DataRoomActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getDataList()
+        CoroutineScope(Dispatchers.IO).launch {
+            downloadAndSaveFile(applicationContext, "기본 동작 테스트.txt")
+        }
     }
 
     private fun getDataList() {
 
         lifecycleScope.launch{
+            binding.loadingContainer.visibility = View.VISIBLE
             dataList = RetrofitClient.getDataList()!!
             if (dataList.isNotEmpty()) {
                 for (data in dataList) {
@@ -39,6 +47,8 @@ class DataRoomActivity : AppCompatActivity() {
                 Log.e("getDataList Error", "")
             }
             initRecycler()
+            binding.loadingContainer.visibility = View.GONE
+
         }
     }
 
